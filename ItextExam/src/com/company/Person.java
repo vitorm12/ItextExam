@@ -23,45 +23,21 @@ public class Person {
      * @param gender gender of entry
      * @param dob date of birth of entry
      * @param color color of entry
-     *
      *This is a constructor which takes in the information parsed of an entry from the file
      * and assigns is to its corresponding variables.
     * */
     public Person(String lastName, String firstName, String gender, String dob, String color) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.dob = dob;
-        this.color = color;
-    }
-    /**
-     * empty default constructor
-    * */
-    public Person() {
-
-    }
-    /**
-     * @param gender gender of entry
-     *
-     * This method sets the gender of the specific entry
-    * */
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-    /**
-     * @param dob date of birth of entry
-     *
-     * sets the date of birth for specific entry
-    * */
-    public void setDob(String dob) {
-        this.dob = dob;
-    }
-    /**
-     * @param color color of the specific entry
-     * Sets the specific color of the entry
-    * */
-    public void setColor(String color) {
-        this.color = color;
+        this.firstName = firstName.trim();
+        if (gender.trim().equals("F")) {
+            this.gender = "Female";
+        } else if (gender.trim().equals("M")) {
+            this.gender = "Male";
+        }else{
+            this.gender = gender.trim();
+        }
+        this.lastName = lastName.trim();
+        this.dob = dob.trim().replaceAll("-","/");
+        this.color = color.trim();
     }
     /**
      * @return lastName
@@ -71,33 +47,26 @@ public class Person {
         return lastName;
     }
     /**
-     * @param lastName last name of the specific entry
-     *
-     *Sets the last name of the specific entry
+     * @return gender
+     * returns the gender of the person
     * */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public String getGender(){
+        return gender;
     }
     /**
-     * @param firstName first name of the specific entry
-     *
-     * sets the first name of the specific entry
+     * @return dob
+     * this returns the dob of the person
     * */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public String getDob(){
+        return this.dob;
     }
     /**
      * This method overrides the toString method of the object
      * This will format the entry to the correct format so it can
      * be written to the file.
-    * */
+     * */
     @Override
     public String toString() {
-        if (gender.equals("F")) {
-            this.gender = "Female";
-        } else if (gender.equals("M")) {
-            this.gender = "Male";
-        }
-        return (lastName + " " + firstName + " " + gender + " " + dob.replaceAll("-", "/") + " " + color + "\n").trim().replaceAll(" +", " ");
+        return (lastName + " " + firstName + " " + gender + " " + dob+ " " + color).replaceAll(" +", " ");
     }
 }

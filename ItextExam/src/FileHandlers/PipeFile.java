@@ -23,14 +23,10 @@ public class PipeFile extends FileHandler {
      * and format the information into the correct format.
      * */
     @Override
-    protected void parseString(String lineToParse) {
+    protected Person parseString(String lineToParse) {
         this.dataSplit = lineToParse.split(this.delimiter);
-        Person person = new Person();
-        person.setLastName(dataSplit[0].trim());
-        person.setFirstName(dataSplit[1].trim());
-        person.setGender(dataSplit[3].trim());
-        person.setColor(dataSplit[4].trim());
-        person.setDob(dataSplit[5].trim().replaceAll("-","/"));
-        this.personMap.put(person.getLastName(),person);
+
+        //String lastName, String firstName, String gender, String dob, String color
+        return new Person(this.dataSplit[0],this.dataSplit[1],this.dataSplit[3],dataSplit[5],this.dataSplit[4]);
     }
 }

@@ -1,6 +1,4 @@
 package FileHandlers;
-
-
 import com.company.Person;
 
 /**
@@ -17,10 +15,9 @@ public class CommaFile extends FileHandler {
      * This method is used to parse the entries from the commaFile
      * */
     @Override
-    protected void parseString(String lineToParse) {
+    protected Person parseString(String lineToParse) {
         this.dataSplit = lineToParse.split(this.delimiter);
-        Person person = new Person(this.dataSplit[0],this.dataSplit[1],this.dataSplit[2],this.dataSplit[4].replaceAll("-","/"),this.dataSplit[3]);
-        this.personMap.put(person.getLastName(),person);
+        return new Person(this.dataSplit[0],this.dataSplit[1],this.dataSplit[2],this.dataSplit[4].replaceAll("-","/"),this.dataSplit[3]);
     }
 
 }

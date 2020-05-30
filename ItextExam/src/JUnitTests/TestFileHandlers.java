@@ -25,11 +25,16 @@ public class TestFileHandlers {
      * */
     @Test
     public void checkSpaceFileEntries() {
-        SpaceFile spaceFile = new SpaceFile("TextFiles/space.txt"," "); // MyClass is tested
-        HashMap<String,Person> mp = spaceFile.getPersonMap();
-        assertEquals(mp.get("Kournikova").toString(),"Kournikova Anna Female 6/3/1975 Red");
-        assertEquals(mp.get("Hingis").toString(),"Hingis Martina Female 4/2/1979 Green");
-        assertEquals(mp.get("Seles").toString(),"Seles Monica Female 12/2/1973 Black");
+        HashMap<String,Person> peopleInOriginalFile = new HashMap<>();
+        peopleInOriginalFile.put("Kournikova",new Person("Kournikova","Anna","Female","6/3/1975","Red"));
+        peopleInOriginalFile.put("Hingis",new Person("Hingis","Martina","Female","4/2/1979","Green"));
+        peopleInOriginalFile.put("Seles",new Person("Seles","Monica","Female","12/2/1973","Black"));
+        SpaceFile space = new SpaceFile("TextFiles/space.txt"," ");
+        for(Person person:space.getFemaleEntries()){
+            assert peopleInOriginalFile.containsKey(person.getLastName());
+            assertEquals(peopleInOriginalFile.get(person.getLastName()).toString(),person.toString());
+        }
+        assert space.getMaleEntries().isEmpty();
     }
     /**
      * checks the data retrieved from the pipe
@@ -37,11 +42,16 @@ public class TestFileHandlers {
      * */
     @Test
     public void checkPipeFileEntries(){
-        PipeFile pipeFile= new PipeFile("TextFiles/pipe.txt","\\|");
-        HashMap<String,Person> mp = pipeFile.getPersonMap();
-        assertEquals(mp.get("Smith").toString(),"Smith Steve Male 3/3/1985 Red");
-        assertEquals(mp.get("Bonk").toString(),"Bonk Radek Male 6/3/1975 Green");
-        assertEquals(mp.get("Bouillon").toString(),"Bouillon Francis Male 6/3/1975 Blue");
+        HashMap<String,Person> peopleInOriginalFile = new HashMap<>();
+        peopleInOriginalFile.put("Smith",new Person("Smith","Steve","Male","3/3/1985","Red"));
+        peopleInOriginalFile.put("Bonk",new Person("Bonk","Radek","Male","6/3/1975","Green"));
+        peopleInOriginalFile.put("Bouillon",new Person("Bouillon","Francis","Male","6/3/1975","Blue"));
+        PipeFile pipe = new PipeFile("TextFiles/pipe.txt","\\|");
+        for(Person person:pipe.getMaleEntries()){
+            assert peopleInOriginalFile.containsKey(person.getLastName());
+            assertEquals(peopleInOriginalFile.get(person.getLastName()).toString(),person.toString());
+        }
+        assert pipe.getFemaleEntries().isEmpty();
     }
     /**
      * checks the data retrieved from the comma
@@ -49,11 +59,19 @@ public class TestFileHandlers {
     * */
     @Test
     public void checkCommaFileEntries(){
-        CommaFile commaFile = new CommaFile("TextFiles/comma.txt",",");
-        HashMap<String,Person> mp = commaFile.getPersonMap();
-        assertEquals(mp.get("Abercrombie").toString(),"Abercrombie Neil Male 2/13/1943 Tan");
-        assertEquals(mp.get("Bishop").toString(),"Bishop Timothy Male 4/23/1967 Yellow");
-        assertEquals(mp.get("Kelly").toString(),"Kelly Sue Female 7/12/1959 Pink");
+        HashMap<String,Person> peopleInOriginalFile = new HashMap<>();
+        peopleInOriginalFile.put("Abercrombie",new Person("Abercrombie","Neil","Male","2/13/1943","Tan"));
+        peopleInOriginalFile.put("Bishop",new Person("Bishop","Timothy","Male","4/23/1967","Yellow"));
+        peopleInOriginalFile.put("Kelly",new Person("Kelly","Sue","Female","7/12/1959","Pink"));
+        CommaFile comma = new CommaFile("TextFiles/comma.txt",",");
+       for(Person person:comma.getFemaleEntries()){
+           assert peopleInOriginalFile.containsKey(person.getLastName());
+          assertEquals(peopleInOriginalFile.get(person.getLastName()).toString(),person.toString());
+       }
+        for(Person person:comma.getMaleEntries()){
+            assert peopleInOriginalFile.containsKey(person.getLastName());
+            assertEquals(peopleInOriginalFile.get(person.getLastName()).toString(),person.toString());
+        }
     }
     /**
      * compares both orginal file and generated file to make sure each are equal

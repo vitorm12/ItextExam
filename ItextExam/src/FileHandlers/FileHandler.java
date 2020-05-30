@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @author Vitor Mouzinho
@@ -24,16 +23,25 @@ public abstract class FileHandler {
     private File file;
     /*Delimiter needed to parse file*/
     protected String delimiter;
-    /*HashMap to store each entry for the corresponding file*/
-    protected HashMap<String, Person> personMap;
+    /*LinkedList to store Male data*/
+    protected LinkedList<Person> maleList;
+    /*LinkedList to store female data*/
+    protected LinkedList<Person> femaleList;
     /*array to store data when its split*/
     protected String[] dataSplit;
     /**
-     * @return personMap holds the entries for each file
-     * getter for personMap
+     * @return femaleList
+     * returns female data
     * */
-    public HashMap<String, Person> getPersonMap(){
-        return personMap;
+    public LinkedList<Person> getFemaleEntries(){
+        return this.femaleList;
+    }
+    /**
+     * @return  maleList
+     * returns male data
+    * */
+    public LinkedList<Person> getMaleEntries(){
+        return this.maleList;
     }
     /**
      * @param fileName name of file
@@ -47,7 +55,8 @@ public abstract class FileHandler {
             this.file = new File(fileName);
             this.fileReader = new Scanner(file);
             this.delimiter = delimiter;
-            this.personMap = new HashMap<String, Person>();
+            this.femaleList = new LinkedList<Person>();
+            this.maleList = new LinkedList<Person>();
         }catch (FileNotFoundException e){
             System.out.println("File not found try putting file into correct path");
             e.printStackTrace();
@@ -59,21 +68,19 @@ public abstract class FileHandler {
      * This is an abstract method that is override by children classes
      * each file requires a different way to parse entries from file
      * */
-    protected abstract void parseString(String lineToParse);
-    /**
-     * @param name name of person
-     * @return boolean if the entry exists within this instance
-     * checks if an entry exists within the HashMap of this instance
-     * */
-    public boolean checkIfPersonExists(String name){
-        return this.personMap.containsKey(name);
-    }
+    protected abstract Person parseString(String lineToParse);
+
     /**
      * This method is used to read information from the file
      * */
     protected void readFile(){
         while (fileReader.hasNextLine()){
-            parseString(fileReader.nextLine());
+            Person nodeToAdd = parseString(fileReader.nextLine());
+            if (nodeToAdd.getGender().equals("Male")){
+                this.maleList.add(nodeToAdd);
+            }else {
+                this.femaleList.add(nodeToAdd);
+            }
         }
         System.out.println("LOG:File done reading");
         fileReader.close();
@@ -85,19 +92,6 @@ public abstract class FileHandler {
     public void writeHeaderToFile(String header){
         try {
             Files.write(Paths.get("OutPutFileCheckHere/output.txt"), header.getBytes(), StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    /**
-     * @param name name of entry to write to file
-     * This method is used to retrieve an entry from this objects Hashmap
-     * and append the information to the file.
-     * */
-    public void writeToFile(String name){
-        String entryToWriteToFIle = this.personMap.get(name).toString()+"\n";
-        try {
-            Files.write(Paths.get("OutPutFileCheckHere/output.txt"), entryToWriteToFIle.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();
         }
